@@ -26,6 +26,12 @@ I've managed to use response entities which return 404 when id is not found for 
 - I've created a JSON repository. In figuring out how to serialise and deserialize my JSON, I explored GSON and Jackson. I've presently decided to stick with Jackson as I found how to parse Instant.
 
 
+// Java .asList() method returns fixed size list and
+// throws UnsupportedOperationException
+// if any element is added using add() method
+
+- Figured out why my create and delete methods weren't working. I defined my collection as Arrays.asList; Apparently Arrays.asList() isn't modifiable ("can't be expanded or shrunk"); however items within it can be modified which is why my update method works. Fix is to wrap it in ArrayList<> or define my collection as an ArrayList
+
 I need to:
 - Write tests for the methods and endpoints.
 

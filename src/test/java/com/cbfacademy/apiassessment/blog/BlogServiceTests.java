@@ -1,6 +1,7 @@
 package com.cbfacademy.apiassessment.blog;
 
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -13,16 +14,18 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-@DisplayName("The BlogService class should: ")
+@DisplayName(value = "The BlogService class should: ")
 public class BlogServiceTests {
     
-
-    BlogService blogService = new BlogService(BlogStub.getBlogStub());
+    // items from blogRepositoryStub.json
+    List<Blog> blogStub = JSONHandler.read("src/test/java/com/cbfacademy/apiassessment/blog/blogRepositoryStub.json");
+    
+    BlogService blogService = new BlogService(blogStub);
 
     @Test
     @DisplayName("return a list of blogs")
     public void findAllBlogsTest() {
-        List<ContentManager> blogList = blogService.findAllBlogs();
+        List<Blog> blogList = blogService.findAllBlogs();
 
         assertTrue(blogList.size() > 0);
     }
@@ -31,9 +34,10 @@ public class BlogServiceTests {
     @DisplayName("return a blog by id")
     public void findBlogByIdTest() {
         Long id = 10L;
-        ContentManager blog = blogService.findBlog(id);
+        Blog blog = blogService.findBlog(id);
 
         assertInstanceOf(Blog.class, blog);
+        assertTrue(blog.getId()==10L);
     }
 
     @Test
@@ -50,12 +54,26 @@ public class BlogServiceTests {
     @Test
     @DisplayName("update a blog")
     public void updateBlogByIdTest() {
-        
+        // update something and check
+        Blog newBlogStub = new Blog(10L, getInstant(), "UpdatedAuthor", "UpdatedTitle", "Test Content");
+
+        blogService.updateBlog(10L, newBlogStub);
+
+        assertTrue(newBlogStub.getAuthor()=="UpdatedAuthor");
+        assertTrue(newBlogStub.getTitle()=="UpdatedTitle");
+                
     }
 
     @Test
     @DisplayName("delete a blog")
     public void deleteBlogByIdTest() {
+        // check size or id
+        Long id = 10L;
+        String delete = blogService.deleteBlog(id);
+
+        assertTrue(blogStub.size() ==2);
+
+        assertThat(delete == "deleted");
         
     }
 

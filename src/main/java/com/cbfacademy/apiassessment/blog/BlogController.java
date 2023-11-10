@@ -22,8 +22,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequestMapping("/blog")
 public class BlogController {
 
+     // items from blogRepository.java
+    List<Blog> blogs = JSONHandler.read("blogRepository.json");
+
     // sample items
-    List<ContentManager> sampleBlog = new ArrayList<>(){
+    List<Blog> sampleBlog = new ArrayList<>(){
                 { 
                     add(new Blog(1L, Instant.parse("2023-04-01T23:59:10.511Z"), "Latifah", "Blog Title 1", "Sample Text 1")); 
                     add(new Blog(2L, Instant.parse("2023-05-01T23:59:20.511Z"), "Mojisola", "Blog Title 2", "Sample Text 2"));
@@ -31,10 +34,8 @@ public class BlogController {
     }
     }; 
 
-    // items from blogRepository.java
-    List<ContentManager> blog = JSONHandler.read("blogRepository.json");
-    
-    BlogService blogService = new BlogService(sampleBlog);
+   
+    BlogService blogService = new BlogService(blogs);
 
     @GetMapping("/ping")
 	public String ping() {
@@ -43,15 +44,15 @@ public class BlogController {
 
     // get all blogs
     @GetMapping
-    public ResponseEntity<List<ContentManager>> findAll() {
-        List<ContentManager> blogs = blogService.findAllBlogs();
+    public ResponseEntity<List<Blog>> findAll() {
+        List<Blog> blogs = blogService.findAllBlogs();
         return ResponseEntity.ok().body(blogs);
     }
 
     // get a blog using its id
     @GetMapping("/{id}")
-    public ResponseEntity<ContentManager> find(@PathVariable("id") Long id) {
-        ContentManager blog = blogService.findBlog(id);
+    public ResponseEntity<Blog> find(@PathVariable("id") Long id) {
+        Blog blog = blogService.findBlog(id);
         if (blog != null) {
             return new ResponseEntity<>(blog, HttpStatus.FOUND);
         } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -70,22 +71,20 @@ public class BlogController {
 
     // update a blog
     @PutMapping("/{id}") // status report for errors
-    public ResponseEntity<ContentManager> update(@PathVariable Long id, @RequestBody Blog updatedBlog){
-        ContentManager updated = blogService.updateBlog(id, updatedBlog);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(updated.getId())
-                .toUri();
-        return ResponseEntity.created(location).body(updated);
+    public ResponseEntity<Blog> update(@PathVariable Long id, @RequestBody Blog updatedBlog){
+        Blog updated = blogService.updateBlog(id, updatedBlog);
+       
+        return ResponseEntity.ok().body(updated);
     }
 
     // delete an item using an id parameter
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable Long id){
-        String deleted = blogService.delete(id);
-        if (deleted != null) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        String deleted = blogService.deleteBlog(id);
+        if (deleted == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } 
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

@@ -2,15 +2,6 @@ package com.cbfacademy.apiassessment.blog;
 
 import java.time.Instant;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.google.gson.annotations.Expose;
-
 
 public class Blog implements ContentManager {
 
@@ -70,14 +61,14 @@ public class Blog implements ContentManager {
         this.content = content;
     }
 
-    // @Override
-    // public String toString() {
-    //     return "{" +
-    //             "id='" + id + '\'' +
-    //             ", date='" + date + '\'' +
-    //             ", author='" + author + '\'' +
-    //             ", title='" + title + '\'' +
-    //             ", content='" + content +
-    //             '}';
-    // }
+    @Override
+    public String toString() {
+        return "{" +
+                "id:'" + id + '\'' +
+                ", date:'" + date + '\'' +
+                ", author:'" + author + '\'' +
+                ", title:'" + title + '\'' +
+                ", content:'" + content +
+                '}';
+    }
 }

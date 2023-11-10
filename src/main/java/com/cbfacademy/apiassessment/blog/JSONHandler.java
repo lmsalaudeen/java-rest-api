@@ -2,17 +2,14 @@ package com.cbfacademy.apiassessment.blog;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -24,15 +21,15 @@ public class JSONHandler {
     // static ObjectMapper objectMapper = new ObjectMapper();
     
     // read json as java object (list of blog) - deserialization (json string to java object)
-     public static List<ContentManager> read (String fileName) {
+     public static List<Blog> read (String fileName) {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         
-        List<ContentManager> blogs = new ArrayList<>();
+        List<Blog> blogs = new ArrayList<>();
         
         try {
             File sourceFile = Paths.get(fileName).toFile();
-            blogs = Arrays.asList(objectMapper.readValue(sourceFile, Blog[].class));
+            blogs = new ArrayList<>(Arrays.asList(objectMapper.readValue(sourceFile, Blog[].class)));
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }

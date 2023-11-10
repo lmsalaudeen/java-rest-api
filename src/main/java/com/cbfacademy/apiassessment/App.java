@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cbfacademy.apiassessment.blog.JSONHandler;
-
 @SpringBootApplication
 @RestController
 public class App {

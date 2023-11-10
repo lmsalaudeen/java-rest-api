@@ -1,23 +1,24 @@
 package com.cbfacademy.apiassessment.blog;
 
-import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class BlogService {
     
-    List<ContentManager> blog;
+    List<Blog> blog;
 
-    public BlogService(List<ContentManager> blog){
+    public BlogService(List<Blog> blog){
         this.blog = blog;
     }
 
-    public List<ContentManager> findAllBlogs() {
+    public List<Blog> findAllBlogs() {
         return this.blog;
     }
 
-    public ContentManager findBlog(Long id) {
-        for (ContentManager blog: this.blog)
+    public Blog findBlog(Long id) {
+        for (Blog blog: this.blog)
             if(blog.getId().equals(id)){ 
                 return blog;
             }
@@ -36,9 +37,9 @@ public class BlogService {
         return newBlog;
     }
 
-    public ContentManager updateBlog(Long id, Blog updatedBlog) {
+    public Blog updateBlog(Long id, Blog updatedBlog) {
         // Only update a blog if it can be found first.
-        for (ContentManager blog: this.blog) {
+        for (Blog blog: this.blog) {
             if(blog.getId().equals(id)){ 
                 blog.setId(updatedBlog.getId());
                 blog.setDate(updatedBlog.getDate());
@@ -52,8 +53,8 @@ public class BlogService {
         return null;
     }
 
-    public String delete(Long id) {
-         for (ContentManager blog: this.blog) {
+    public String deleteBlog(Long id) {
+         for (Blog blog: this.blog) {
             if(blog.getId().equals(id)){ 
                 this.blog.remove(blog);
                 return "deleted";
