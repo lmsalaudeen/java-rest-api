@@ -1,4 +1,4 @@
-# Content Manager API
+# Blog Manager API
 I have a blog class which defines the attributes of a blog:
 - id
 - date
@@ -6,39 +6,22 @@ I have a blog class which defines the attributes of a blog:
 - title
 - content
 
-I have a blogService class which has the methods that can be carried out on the blog. Also has a collection of blog (not anymore).
+I have a blogService class which has the methods that can be carried out on the blog. 
 
 The blogController calls the service to do stuff to the blog and create mappings to different endpoints.
 
-03/11/2023, So far:
-I've created the blog class, blogService and the CRUD methods, BlogController and endpoints
+I have a JSONHandler which handles serialisation and deserialization of my json file (the in-memory repository).
 
-07/11/2023, So far
-I've just created a ContentManager interface cos I wanted to be able to create a BlogStub, so a lot of rewiring.
-I've managed to use response entities which return 404 when id is not found for get and delete endpoints, put returns a 500 status code when invalid id is used. 
+I have an Algorithm class that has methods to search terms in blog content and blog author and sort blog posts by date.
 
-10/11/2023, So far
-- I've created JSON File Handler class with methods to serialise and deserialise json files.
-- - Questions Questions (What's a no args constructor. My blog class was not deserializing without the no args constructor)
-- - I had to define a constructor with no arguments in my Blog class before I was able to read my .json file
-- - Explored using @JsonDeserialize(using = InstantSerializer.class) and @JsonDeserialize(using = InstantDeserializer.class); my methods worked without them 
-- I created a ContentManager interface, because I wanted to create a BlogStub in my test. Blog now implements the ContentManager interface. The issue with this is that I may have to fully define my methods in ContentManager as delete and createBlog are not working as is. OR rather than have a blogStub object, have a blogStubRepository.json which I can convert to java objects with JSONHandler
-- I've created a JSON repository. In figuring out how to serialise and deserialize my JSON, I explored GSON and Jackson. I've presently decided to stick with Jackson as I found how to parse Instant.
-
-
-// Java .asList() method returns fixed size list and
-// throws UnsupportedOperationException
-// if any element is added using add() method
-
-- Figured out why my create and delete methods weren't working. I defined my collection as Arrays.asList; Apparently Arrays.asList() isn't modifiable ("can't be expanded or shrunk"); however items within it can be modified which is why my update method works. Fix is to wrap it in ArrayList<> or define my collection as an ArrayList
-
-I need to:
-- Write tests for the methods and endpoints.
-
-
-Further TO DO
-- Sorting the blog posts by date (I could use/convert to timestamp format for a sorting algo)
-- Handling exceptions - make sure string is entered, valid date etc..
-- Build my JSON database 
-- ... JSON issues
+## The Endpoints
+- /blog/blogs: returns all blogs
+- /blog/blogs/author=author: return blogs with specified authors
+- /blog/blogs/orderByOldest: returns all blogs ordered from oldest to most recent
+- /blog/blogs/orderByLatest: returns all blogs ordered from most recent to oldest
+- /blog/id: returns a blog with specified id
+- /blog: create a blog post
+- /blog/id: update a blog with specified id
+- /blog/id: delete a blog with specified id
+- /blog/blogs/keyword=keyword: return blogs with specified keyword in content
 

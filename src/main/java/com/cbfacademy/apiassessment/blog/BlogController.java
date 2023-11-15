@@ -2,7 +2,6 @@ package com.cbfacademy.apiassessment.blog;
 
 import java.net.URI;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -24,16 +23,6 @@ public class BlogController {
 
      // items from blogRepository.java
     List<Blog> blogs = JSONHandler.read("blogRepository.json");
-
-    // sample items
-    List<Blog> sampleBlog = new ArrayList<>(){
-                { 
-                    add(new Blog(1L, Instant.parse("2023-04-01T23:59:10.511Z"), "Latifah", "Blog Title 1", "Sample Text 1")); 
-                    add(new Blog(2L, Instant.parse("2023-05-01T23:59:20.511Z"), "Mojisola", "Blog Title 2", "Sample Text 2"));
-                    add(new Blog(3L, Instant.parse("2023-06-01T23:59:30.511Z"), "Salaudeen", "Blog Title 3", "Sample Text 3"));
-    }
-    }; 
-
    
     BlogService blogService = new BlogService(blogs);
 
@@ -43,7 +32,7 @@ public class BlogController {
 	}
 
     // get all blogs
-    @GetMapping
+    @GetMapping("/blogs")
     public ResponseEntity<List<Blog>> findAll() {
         List<Blog> blogs = blogService.findAllBlogs();
         return ResponseEntity.ok().body(blogs);
@@ -66,25 +55,58 @@ public class BlogController {
                 .path("/{id}")
                 .buildAndExpand(created.getId())
                 .toUri();
+        // then write back to file?
+        JSONHandler.saveList(blogs, "blogRepository.json");
         return ResponseEntity.created(location).body(created);
     }
 
-    // update a blog
-    @PutMapping("/{id}") // status report for errors
+    // update a blog using an id parameter
+    @PutMapping("/{id}") 
     public ResponseEntity<Blog> update(@PathVariable Long id, @RequestBody Blog updatedBlog){
         Blog updated = blogService.updateBlog(id, updatedBlog);
-       
+        // then write back to file
+        JSONHandler.saveList(blogs, "blogRepository.json");
+
         return ResponseEntity.ok().body(updated);
     }
 
-    // delete an item using an id parameter
+    // delete a blog using an id parameter
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable Long id){
         String deleted = blogService.deleteBlog(id);
         if (deleted == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } 
+        // then write back to file
+        JSONHandler.saveList(blogs, "blogRepository.json");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    // get blogs with keyword in content
+    @GetMapping("/blogs/keyword={keyword}")
+    public ResponseEntity<List<Blog>> findKeyword(@PathVariable("keyword") String keyword) {
+        List<Blog> blogs = blogService.findBlogsWithKeyword(keyword);
+        return ResponseEntity.ok().body(blogs);
+    }
+
+    // get Blogs by a particular author
+    @GetMapping("/blogs/author={authorName}")
+    public ResponseEntity<List<Blog>> findByAuthor(@PathVariable("authorName") String authorName) {
+        List<Blog> blogs = blogService.findBlogsByAuthor(authorName);
+        return ResponseEntity.ok().body(blogs);
+    }
+
+    // get all blogs ordered by date, asc (oldest post)
+    @GetMapping("/blogs/orderByOldest")
+    public ResponseEntity<List<Blog>> orderByOldest() {
+        List<Blog> blogs = blogService.orderByOldest();
+        return ResponseEntity.ok().body(blogs);
+    }
+
+    // get all blogs ordered by date, desc (latest post)
+    @GetMapping("/blogs/orderByLatest")
+    public ResponseEntity<List<Blog>> orderByLatest() {
+        List<Blog> blogs = blogService.orderByLatest();
+        return ResponseEntity.ok().body(blogs);
+    }
 }

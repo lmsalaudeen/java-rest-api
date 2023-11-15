@@ -17,8 +17,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 
 public class JSONHandler {
-
-    // static ObjectMapper objectMapper = new ObjectMapper();
     
     // read json as java object (list of blog) - deserialization (json string to java object)
      public static List<Blog> read (String fileName) {
@@ -48,12 +46,12 @@ public class JSONHandler {
         try {
              // create a writer
             FileWriter writer = new FileWriter((outputFile)); 
-            BufferedWriter bw = new BufferedWriter(writer);
+            BufferedWriter bufferedWriter = new BufferedWriter(writer);
 
             // convert blog[] object to JSON string, and write to file
-            objectWriter.writeValue(bw, blogs);
+            objectWriter.writeValue(bufferedWriter, blogs);
             // close writer
-            bw.close();
+            bufferedWriter.close();
             writer.close();
         } catch (IOException e) {
             System.err.println(e.getMessage());
@@ -63,9 +61,11 @@ public class JSONHandler {
     // read one java object (blog) as json - serialization (java object to json string)
     public static void save(Blog blogs, String outputFile) {
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.registerModule(new JavaTimeModule()).
+        configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        
         try {
-            // convert blog[] object to JSON string, and write to file
+            // convert blog object to JSON string, and write to file
             objectMapper.writeValue(Paths.get(outputFile).toFile(), blogs);
             
         } catch (IOException e) {

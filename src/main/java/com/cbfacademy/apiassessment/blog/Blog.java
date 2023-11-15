@@ -2,15 +2,13 @@ package com.cbfacademy.apiassessment.blog;
 
 import java.time.Instant;
 
+import org.springframework.lang.NonNull;
 
-public class Blog implements ContentManager {
 
-    // @JsonProperty("id")
+public class Blog {
+
     private Long id;
 
-    // @JsonProperty("date")
-    // @JsonSerialize(using = InstantSerializer.class)
-    // @JsonDeserialize(using = InstantDeserializer.class)
     private Instant date;
     
     private String author;
@@ -19,7 +17,10 @@ public class Blog implements ContentManager {
 
     private String content;
 
-    public Blog(Long id, Instant date, String author, String title, String content) {
+    public Blog(@NonNull Long id, Instant date, String author, String title, String content) {
+        if (id == null) {
+            throw new NullPointerException("id is marked non-null but is null");
+        }
         this.id = id;
         this.date = date;
         this.author = author;
@@ -36,6 +37,7 @@ public class Blog implements ContentManager {
     public void setId(Long id) {
         this.id = id;
     }
+
     public Instant getDate() {
         return date;
     }
