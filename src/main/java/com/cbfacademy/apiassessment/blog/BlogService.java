@@ -53,7 +53,6 @@ public class BlogService {
                 blog.setAuthor(updatedBlog.getAuthor());
                 blog.setTitle(updatedBlog.getTitle());
                 blog.setContent(updatedBlog.getContent());
-
                 return blog;
             }
         }

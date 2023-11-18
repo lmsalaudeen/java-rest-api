@@ -25,3 +25,6 @@ I have an Algorithm class that has methods to search terms in blog content and b
 - /blog/id: delete a blog with specified id
 - /blog/blogs/keyword=keyword: return blogs with specified keyword in content
 
+
+## Test issues
+some tests failing cos test classes influencing main program. considering creating a temp file for test.

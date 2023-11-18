@@ -70,7 +70,7 @@ public class BlogControllerTests {
 	public void shouldCreateANewBlog() {
 		Blog blog = new Blog(100L, Instant.parse("2023-04-01T23:59:10.511Z"), "test", "Test Blog Title", "Test Sample Text");
 		
-        ResponseEntity<Blog> createResponse = this.restTemplate.postForEntity(baseURL.toString(), blog, Blog.class);
+        ResponseEntity<Blog> createResponse = this.restTemplate.postForEntity(baseURL.toString()+"/", blog, Blog.class);
 		Blog createdBlog = createResponse.getBody();
         
 		ResponseEntity<Blog> response = restTemplate.getForEntity(baseURL.toString()+"/"+ createdBlog.getId(), Blog.class);
