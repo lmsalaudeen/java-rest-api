@@ -48,6 +48,7 @@ public class BlogController {
       @ApiResponse(responseCode = "200", content = { @Content(array = @ArraySchema(schema = @Schema(implementation = Blog.class)), mediaType = "application/json") }),
       @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
       @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
+      
     @GetMapping("/blogs")
     public ResponseEntity<List<Blog>> findAll() {
         List<Blog> blogs = blogService.findAllBlogs();
