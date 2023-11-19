@@ -51,7 +51,7 @@ public class Algorithm {
         }
 
         for (int i = midIndex; i<blogs.size(); i++) { //i=3; i<7
-            listTwo.add(blogs.get(i)); // 1. arrayTwo[3-3] = array[3]; 2. arrayTwo[4-3] = array[4];
+            listTwo.add(blogs.get(i)); // 1. arrayTwo[3] = array[3]; 2. arrayTwo[4] = array[4];
         }
 
         // calling mergeSort on the 1st sublist - further division
@@ -91,18 +91,15 @@ public class Algorithm {
         // Once one of the sublists run out of elements, put the remaining items in list
         while (listOneCounter < listOne.size()) {
             list.set(listCounter, listOne.get(listOneCounter));
-            // mergedList.add(listOne.get(listOneCounter));
             listOneCounter++;
             listCounter++;
         }
 
         while (listTwoCounter < listTwo.size()) {
             list.set(listCounter, listTwo.get(listTwoCounter));
-            // mergedList.add(listTwo.get(listTwoCounter));
             listTwoCounter++;
             listCounter++;
            
         }
-        // return list;
-        };
+    };
 }

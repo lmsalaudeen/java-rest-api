@@ -3,11 +3,8 @@ package com.cbfacademy.apiassessment.blog;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
 import com.cbfacademy.apiassessment.algorithm.Algorithm;
 
-@Service
 public class BlogService {
     
     List<Blog> blogs;
@@ -53,7 +50,6 @@ public class BlogService {
                 blog.setAuthor(updatedBlog.getAuthor());
                 blog.setTitle(updatedBlog.getTitle());
                 blog.setContent(updatedBlog.getContent());
-
                 return blog;
             }
         }

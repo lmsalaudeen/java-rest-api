@@ -1,11 +1,10 @@
 package com.cbfacademy.apiassessment.blog;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 import java.net.URL;
 import java.time.Instant;
@@ -20,16 +19,14 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.cbfacademy.apiassessment.App;
-
-@SpringBootTest(classes = App.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BlogControllerTests {
     
     @LocalServerPort
 	private int port;
 
 	private URL baseURL;
-
+	
     @Autowired
 	private BlogController controller;
 
@@ -56,21 +53,21 @@ public class BlogControllerTests {
 	}
 
     @Test
-	@DisplayName("/blog endpoint returns list of blogs")
+	@DisplayName("/blogs endpoint returns list of blogs")
 	public void blogShouldReturnListOfBlogs() {
         
-		ResponseEntity<Blog[]> response = restTemplate.getForEntity(baseURL.toString(), Blog[].class);
+		ResponseEntity<Blog[]> response = restTemplate.getForEntity("/blog/blogs", Blog[].class);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals(response.getBody(), assertInstanceOf(Blog[].class, response.getBody()));
 	}
 
     @Test
-    @DisplayName("should return blog by id")
+    @DisplayName("should create a new blog")
 	public void shouldCreateANewBlog() {
-		Blog blog = new Blog(100L, Instant.parse("2023-04-01T23:59:10.511Z"), "test", "Test Blog Title", "Test Sample Text");
+		Blog blog = new Blog(19871L, Instant.parse("2023-04-01T23:59:10.511Z"), "test", "Test Blog Title", "Test Sample Text");
 		
-        ResponseEntity<Blog> createResponse = this.restTemplate.postForEntity(baseURL.toString(), blog, Blog.class);
+        ResponseEntity<Blog> createResponse = restTemplate.postForEntity("/blog/", blog, Blog.class);
 		Blog createdBlog = createResponse.getBody();
         
 		ResponseEntity<Blog> response = restTemplate.getForEntity(baseURL.toString()+"/"+ createdBlog.getId(), Blog.class);
@@ -85,10 +82,10 @@ public class BlogControllerTests {
 	
 
     @Test
-     @DisplayName("should update a blog by id")
+    @DisplayName("should update a blog by id")
 	public void shouldUpdateAnExistingBlog() {
-		Blog blog = new Blog(100L, Instant.parse("2023-04-01T23:59:10.511Z"), "test", "Test Blog Title", "Test Sample Text");
-		ResponseEntity<Blog> createResponse = restTemplate.postForEntity(baseURL.toString(), blog, Blog.class);
+		Blog blog = new Blog(11100L, Instant.parse("2023-04-01T23:59:10.511Z"), "testtest", "Test Blog Title", "Test Sample Text");
+		ResponseEntity<Blog> createResponse = restTemplate.postForEntity(baseURL.toString()+"/", blog, Blog.class);
 
 		Blog createdBlog = createResponse.getBody();
 		createdBlog.setAuthor("UpdatedAuthor");
@@ -106,16 +103,24 @@ public class BlogControllerTests {
 
 	@Test
 	public void shouldDeleteAnExistingBlog() {
-		Blog blog = new Blog(15L, Instant.parse("2023-04-01T23:59:10.511Z"), "test", "Test Blog Title", "Test Sample Text");
-		ResponseEntity<Blog> createResponse = restTemplate.postForEntity(baseURL.toString(), blog, Blog.class);
+		Blog blog = new Blog(15000L, Instant.parse("2023-04-01T23:59:10.511Z"), "test", "Test Blog Title", "Test Sample Text");
+		ResponseEntity<Blog> createResponse = restTemplate.postForEntity(baseURL.toString()+"/", blog, Blog.class);
 
 		Blog createdBlog = createResponse.getBody();
+
 		restTemplate.delete(baseURL.toString()+"/" + createdBlog.getId());
 
 		ResponseEntity<Blog> response = restTemplate.getForEntity(baseURL.toString()+"/" + createdBlog.getId(), Blog.class);
 
         assertEquals(HttpStatus.CREATED, createResponse.getStatusCode());
         assertNotNull(createdBlog);
+		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+	}
+
+	@Test
+	public void invalidIdShouldReturnNotFound() {
+		ResponseEntity<Blog> response = restTemplate.getForEntity(baseURL.toString()+"/2023", Blog.class);
+
 		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 	}
 }

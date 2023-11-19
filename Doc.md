@@ -1,12 +1,16 @@
-# Blog Manager API
-I have a blog class which defines the attributes of a blog:
+# REST API with SprtinBoot: Blog Manager API (CBF Assessment)
+I've created a blog object which has the attributes: 
 - id
 - date
 - author
 - title
 - content
 
-I have a blogService class which has the methods that can be carried out on the blog. 
+The blogService has the methods that can be carried out on the blog, such as:
+- read (all, one item)
+- create
+- update
+- delete 
 
 The blogController calls the service to do stuff to the blog and create mappings to different endpoints.
 
@@ -24,4 +28,3 @@ I have an Algorithm class that has methods to search terms in blog content and b
 - /blog/id: update a blog with specified id
 - /blog/id: delete a blog with specified id
 - /blog/blogs/keyword=keyword: return blogs with specified keyword in content
-

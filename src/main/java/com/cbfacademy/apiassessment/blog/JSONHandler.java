@@ -37,7 +37,6 @@ public class JSONHandler {
     // read java object (list of blog) as json - serialization (java object to json string)
     public static void saveList(List<Blog> blogs, String outputFile) {
         ObjectMapper objectMapper = new ObjectMapper()
-        // .registerModule(new JavaTimeModule())
         .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
         .findAndRegisterModules();
 
