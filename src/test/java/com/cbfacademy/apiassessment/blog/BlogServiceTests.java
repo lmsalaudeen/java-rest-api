@@ -43,7 +43,7 @@ public class BlogServiceTests {
     @Test
     @DisplayName("create a blog")
     public void createBlogTest() {
-        Blog newBlogStub = new Blog(10L, getInstant(), "NotLatifah", "Test title", "Test Content");
+        Blog newBlogStub = new Blog(110L, getInstant(), "NotLatifah", "Test title", "Test Content");
                 
         blogService.createBlog(newBlogStub);
 
